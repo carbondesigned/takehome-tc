@@ -1,6 +1,7 @@
 'use client';
 
 import {Button} from '@/components/ui/button';
+import LoadingSpinner from '@/components/ui/spinner';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
 import {Bar, BarChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
@@ -29,14 +30,15 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className='h-screen w-full flex justify-center'>
+        <LoadingSpinner />
+      </div>
+    );
   if (error) return <div>Error: {JSON.stringify(error)}</div>;
   return (
     <main className='max-w-3xl mx-auto'>
-      <Link href='/grade'>
-        <Button>Submit a Grade</Button>
-      </Link>
-
       <ResponsiveContainer width='100%' height={350}>
         <BarChart data={data}>
           <XAxis
