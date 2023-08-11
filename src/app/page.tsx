@@ -1,5 +1,6 @@
 'use client';
 
+import AnalyzeFeedback from '@/components/analyze-feedback';
 import {Button} from '@/components/ui/button';
 import LoadingSpinner from '@/components/ui/spinner';
 import Link from 'next/link';
@@ -62,6 +63,8 @@ export default function Home() {
           />
         </BarChart>
       </ResponsiveContainer>
+
+      <AnalyzeFeedback />
     </main>
   );
 }
