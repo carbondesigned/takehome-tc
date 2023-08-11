@@ -45,8 +45,8 @@ export default function Page() {
   const [subjectsToGrade, setSubjectsToGrade] = useState<Subject[]>([]);
   const [studentName, setStudentName] = useState('');
   const router = useRouter();
-  const [feedback, setFeedback] = useState('');
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
     const data = {
       name: studentName,
       acedemics: subjectsToGrade.map((subject) => ({
@@ -85,7 +85,14 @@ export default function Page() {
       <form onSubmit={handleSubmit}>
         <div>
           <Label htmlFor='name'>Student Name</Label>
-          <Input id='name' type='text' placeholder='Joey Doe' />
+          <Input
+            id='name'
+            type='text'
+            placeholder='Joey Doe'
+            onChange={(e) => {
+              setStudentName(e.target.value);
+            }}
+          />
         </div>
 
         {subjectsToGrade.length === 0 ? (
@@ -94,7 +101,7 @@ export default function Page() {
             onClick={() => {
               setSubjectsToGrade((subjects) => [
                 ...subjects,
-                {subject: '', grade: 0, feedback: ''},
+                {subject: 'math', grade: 75, feedback: ''},
               ]);
             }}
           >
@@ -108,7 +115,16 @@ export default function Page() {
                   <div className='flex-1'>
                     <Label htmlFor='subject'>Subject</Label>
                     <div className='flex-1'>
-                      <Select>
+                      <Select
+                        value={subjectsToGrade[index].subject}
+                        onValueChange={(subject) => {
+                          setSubjectsToGrade((subjects) => {
+                            const newSubjects = [...subjects];
+                            newSubjects[index].subject = subject;
+                            return newSubjects;
+                          });
+                        }}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder='Select a subject' />
                         </SelectTrigger>
@@ -129,12 +145,39 @@ export default function Page() {
                   </div>
                   <div className='flex-[0.25]'>
                     <Label htmlFor='grade'>Grade</Label>
-                    <Input id='grade' type='number' placeholder='73' />
+                    <Input
+                      id='grade'
+                      type='number'
+                      placeholder='73'
+                      value={subjectsToGrade[index].grade}
+                      onChange={(e) => {
+                        setSubjectsToGrade((subjects) => {
+                          const newSubjects = [...subjects];
+                          newSubjects[index].grade = parseInt(
+                            e.target.value,
+                            10
+                          );
+                          return newSubjects;
+                        });
+                      }}
+                    />
                   </div>
                 </div>
                 <div>
                   <Label htmlFor='feedback'>Feedback</Label>
-                  <Textarea id='feedback' placeholder='Great job!' />
+                  <Textarea
+                    id='feedback'
+                    placeholder='Great job!'
+                    value={subjectsToGrade[index].feedback}
+                    onChange={(e) => {
+                      setSubjectsToGrade((subjects) => {
+                        // set the feedback for the subject at the current index
+                        const newSubjects = [...subjects];
+                        newSubjects[index].feedback = e.target.value;
+                        return newSubjects;
+                      });
+                    }}
+                  />
                 </div>
                 {subjectsToGrade.length === index + 1 &&
                   subjectsToGrade.length < 4 && (
@@ -145,7 +188,7 @@ export default function Page() {
                         onClick={() => {
                           setSubjectsToGrade((subjects) => [
                             ...subjects,
-                            {subject: '', grade: 0, feedback: ''},
+                            {subject: 'math', grade: 75, feedback: ''},
                           ]);
                         }}
                       >

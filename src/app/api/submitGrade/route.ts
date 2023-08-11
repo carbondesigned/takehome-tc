@@ -4,17 +4,19 @@ import {prisma} from '@/lib/db';
 export async function POST(req: Request) {
   const body = await req.json();
 
-  if (body.student && body.acedemics) {
+  if (body.name && body.acedemics && Array.isArray(body.acedemics)) {
     try {
       const student = await prisma.student.create({
         data: {
-          name: body.student.name,
+          name: body.name,
           acedemics: {
-            create: {
-              subject: body.acedemics.subject,
-              score: body.acedemics.score,
-              feedback: body.acedemics.feedback,
-            },
+            create: body.acedemics.map(
+              (academic: {subject: string; grade: any; feedback: any}) => ({
+                subject: academic.subject.toUpperCase(),
+                score: academic.grade,
+                feedback: academic.feedback,
+              })
+            ),
           },
         },
       });
@@ -26,7 +28,7 @@ export async function POST(req: Request) {
     }
   } else {
     return NextResponse.json(
-      {error: 'Missing student or acedemics'},
+      {error: 'Missing student name or acedemics'},
       {status: 400}
     );
   }
