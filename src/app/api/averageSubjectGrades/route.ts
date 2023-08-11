@@ -1,5 +1,6 @@
 import {NextResponse} from 'next/server';
 import {prisma} from '@/lib/db';
+import {capitalizeFirstLetter} from '@/lib/utils';
 
 export async function GET(req: Request) {
   try {
@@ -11,7 +12,7 @@ export async function GET(req: Request) {
     });
 
     const formattedData = averages.map((item) => ({
-      name: item.subject,
+      name: capitalizeFirstLetter(item.subject.toLowerCase()),
       total: item._avg.score ? parseFloat(item._avg.score.toFixed(3)) : 0, // or any other default value you'd like
     }));
 

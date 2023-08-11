@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select';
 import {Textarea} from '@/components/ui/textarea';
 import {FormEventHandler, useState} from 'react';
-import {Plus, X} from 'lucide-react';
+import {ChevronLeft, Plus, X} from 'lucide-react';
 import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 
@@ -66,10 +66,8 @@ export default function Page() {
       });
 
       if (response.ok) {
-        // Handle success, maybe reset the form or navigate somewhere
         router.push('/');
       } else {
-        // Handle errors
         const errorData = await response.json();
         console.error('Error submitting data:', errorData);
       }
@@ -80,9 +78,12 @@ export default function Page() {
   return (
     <main className='max-w-3xl mx-auto'>
       <Link href='/'>
-        <Button>Back</Button>
+        <Button>
+          <ChevronLeft size={16} />
+          Back
+        </Button>
       </Link>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='mt-12'>
         <div>
           <Label htmlFor='name'>Student Name</Label>
           <Input
@@ -171,7 +172,6 @@ export default function Page() {
                     value={subjectsToGrade[index].feedback}
                     onChange={(e) => {
                       setSubjectsToGrade((subjects) => {
-                        // set the feedback for the subject at the current index
                         const newSubjects = [...subjects];
                         newSubjects[index].feedback = e.target.value;
                         return newSubjects;

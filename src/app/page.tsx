@@ -56,11 +56,7 @@ export default function Home() {
             axisLine={false}
             tickFormatter={(value) => `${value}%`}
           />
-          <Bar
-            dataKey='total'
-            fill='[#ffedd4, #ffb9a2]'
-            radius={[4, 4, 0, 0]}
-          />
+          <Bar dataKey='total' radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
 
