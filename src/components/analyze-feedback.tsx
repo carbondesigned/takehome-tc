@@ -5,11 +5,12 @@ import LoadingSpinner from './ui/spinner';
 import {Button} from './ui/button';
 
 export default function AnalyzeFeedback() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<any>({});
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<null | unknown>(null);
 
   async function fetchData() {
+    setLoading(true);
     try {
       const response = await fetch('/api/analyzeFeedback');
       if (!response.ok) {
@@ -24,17 +25,15 @@ export default function AnalyzeFeedback() {
     }
   }
 
-  //   if (loading)
-  //     return (
-  //       <div className='h-screen w-full flex justify-center'>
-  //         <LoadingSpinner />
-  //       </div>
-  //     );
-  //   if (error) return <div>Error: {JSON.stringify(error)}</div>;
+  if (error) return <div>Error: {JSON.stringify(error)}</div>;
 
   return (
     <div>
+      <h2 className='text-lg font-bold my-4 text-black/75'>
+        Analyze student feedback to get a quick summary
+      </h2>
       <Button
+        className='my-4'
         onClick={() => {
           fetchData();
         }}
@@ -42,7 +41,13 @@ export default function AnalyzeFeedback() {
         Analyze
       </Button>
 
-      <p>{JSON.stringify(data)}</p>
+      {loading ? (
+        <div className='h-screen w-full flex justify-center'>
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <p>{data.summary}</p>
+      )}
     </div>
   );
 }
